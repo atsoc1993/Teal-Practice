@@ -1,44 +1,79 @@
 #pragma version 12
 
 main:
-    bytecblock "test_1" "test_2" "test_3" "test_4" "test_5"
-    bytec_0
-    pushint 1
-    app_global_put
-    bytec_1
-    pushint 1
-    app_global_put
-    bytec_2
-    pushint 1
-    app_global_put
-    bytec_3
-    pushint 1
-    app_global_put
-    bytec 4
-    pushint 1
-    app_global_put
-    txn NumAppArgs
-    bz route_1
-    pushbytess 0x00000002 0x00000003
-    txna ApplicationArgs 0
-    match route_2 route_3
-    pushint 1
-    return
+    bytecblock "test_1_int" "test_2_int" "test_3_int" "test_bytes_1" "test_bytes_2" //declare constants
+    txn NumAppArgs // check number of app args and add to stack
+    bz create_route_0 // if the number of args is 0, run create_route
+    pushbytess 0x00000002 0x00000003 0x00000004 0x00000005 // add these two values to the stack for method signatures
+    txna ApplicationArgs 0 // add the application arg at the 0th index to the stack
+    match route_2 route_3 route_4 route_5 // map the previous stack value (application arg) to the two method signatures and run one of these two routes
+    pushint 1 // add 1 to stack
+    return // return
     
+create_route_0:
+    pushbytes "Created App!" // created app bytes to stack
+    log // log the previous bytes
+    pushint 1 // add 1 to stack
+    return // return
+
 route_1:
-    pushbytes "Called Route 1!"
-    log
-    pushint 1
-    return
+    pushbytes "Called Route 1!" // add bytes to stack
+    log // log the bytes
+    bytec_0 // references the 1st index constant in bytecblock
+    pushint 1 // add 1 to the stack
+    app_global_put // maps the previous two values as key:value for global state
+    bytec_1 // references the 2nd index constant in bytecblock
+    pushint 1 // add 1 to stack
+    app_global_put // maps the previous two values as key:value for global state
+    bytec_2 // references the 3rd index constant in bytecblock
+    pushint 1 // add 1 to stack
+    app_global_put // maps the previous two values as key:value for global state
+    bytec_3 // references the 4th index constant in bytecblock
+    pushbytes "test_bytes_value_1"
+    app_global_put // maps the previous two values as key:value for global state
+    pushint 1 // add 1 to stack to indicate success
+    return // return
 
 route_2:
     pushbytes "Called Route 2!"
-    log
-    pushint 1
-    return
+    log // log the previous bytes
+    bytec 4 // references the 5th index constant in bytecblock
+    pushbytes "test_bytes_value_2"
+    app_global_put // maps the previous two values as key:value for global state
+    pushint 1 // add 1 to stack to indicate success
+    return // return
 
 route_3:
     pushbytes "Called Route 3!"
+    log // log the previous bytes
+    pushbytess "test_bytes_3" "test_bytes_value_3"
+    app_global_put // maps the previous two values as key:value for global state
+    pushint 1 // add 1 to stack to indicate success
+    return // return
+
+route_4:
+    pushbytess "item_1" "item_2" // add item_1 to the stack, then item_2, item_2 is at the top of the stack
+    log // logs item_2
+    log // logs item_1
+    pushint 1 // adds 1 to the stack to successfully return
+    return // returns
+
+route_5:
+    pushbytes "Calling Route 5" // add calling route 5 to the stack
+    log // log the above value on the stack
+    callsub route_6 // call route_6
+    pushbytes "The following two log opcodes will contain this string, then the value on the stack added in route 6"
     log
+    log
+    pushbytess "All Done!" "Called subroutine" // add all done, then called subroutine to the stack
+    log // log "called subroutine"
+    log // log "all done!"
     pushint 1
     return
+
+
+route_6:
+    pushbytes "Calling A Subroutine" // add these bytes to the stack
+    log // log the aforementioned bytes
+    pushbytes "Bring me back to route 5!" // add something to the stack that will remain when returning from the subroutine
+    retsub // return from this subroutine and proceed, do not use regular return, retsub does not require 1 on the stack beforehand

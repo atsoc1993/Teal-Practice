@@ -1,28 +1,34 @@
 #pragma version 12
 
 main:
-    txn NumAppArgs
-    bz route_1
-    pushbytess 0x00000002 0x00000003
-    txna ApplicationArgs 0
-    match route_2 route_3
-    pushint 1
-    return
+    txn NumAppArgs // check the number of app args and add this number to stack
+    bz create_route_0 // check the previous stack value, and if that number is 0, run the create_route_0 branch
+    pushbytess 0x00000002 0x00000003 // declare the two method signatures as a 4 byte long integer and add to stack
+    txna ApplicationArgs 0 // push the arg at the 0th index to the stack
+    match route_2 route_3 // check if the any of the declared method signatures match arg at 0th index, if so run that route logic
+    pushint 1 // add 1 to the stack to prime for successful return
+    return // return
     
+create_route_0:
+    pushbytes "Created App! // add bytes to stack
+    log // log bytes
+    pushint 1 // add 1 to stack
+    return // return
+
 route_1:
-    pushbytes "Called Route 1!"
-    log
-    pushint 1
-    return
+    pushbytes "Called Route 1!" // add bytes to stack
+    log // log bytes
+    pushint 1 // add 1 to stack
+    return // return
 
 route_2:
-    pushbytes "Called Route 2!"
-    log
-    pushint 1
-    return
+    pushbytes "Called Route 2!" // add bytes to stack
+    log // log bytes
+    pushint 1 //add 1 to stack
+    return // return
 
 route_3:
-    pushbytes "Called Route 3!"
-    log
-    pushint 1
-    return
+    pushbytes "Called Route 3!" // add bytes to stack
+    log // log bytes
+    pushint 1 // add 1 to stack
+    return // return

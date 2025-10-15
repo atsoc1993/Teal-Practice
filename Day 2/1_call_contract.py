@@ -21,11 +21,11 @@ txn_response = algorand.send.app_call(
     AppCallParams(
         sender=signing_account.address,
         signer=signing_account.signer,
-        args=[(3).to_bytes(4, 'big')],
+        args=[(5).to_bytes(4, 'big')],
         app_id=app_id,
         on_complete=OnComplete.NoOpOC
     )
 )
 
-print(txn_response)
+print(txn_response.tx_id)
 

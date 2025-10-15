@@ -19,12 +19,12 @@ clear_teal = open("Day 2/clear.teal").read()
 compiled_approval = app_manager.compile_teal(approval_teal)
 compiled_clear = app_manager.compile_teal(clear_teal)
 
-print(compiled_approval.compiled)
-print(compiled_clear.compiled)
+# print(compiled_approval.compiled)
+# print(compiled_clear.compiled)
 
 state_schema = AppCreateSchema(
-    global_ints=5,
-    global_byte_slices=0,
+    global_ints=3,
+    global_byte_slices=3,
     local_ints=0,
     local_byte_slices=0,
 )
@@ -39,6 +39,6 @@ txn_response = algorand.send.app_create(
     )
 )
 
-print(txn_response)
-
+print(txn_response.tx_id)
+print(txn_response.app_id)
 set_key('./.env', 'app_id', str(txn_response.app_id))
