@@ -4,12 +4,16 @@ main:
     bytecblock "test_1" "test_2" "test_3" "test_4" "test_5"
     bytec_0
     pushint 1
+    app_global_put
     bytec_1
     pushint 1
+    app_global_put
     bytec_2
     pushint 1
+    app_global_put
     bytec_3
     pushint 1
+    app_global_put
     bytec 4
     pushint 1
     app_global_put
