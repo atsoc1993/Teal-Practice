@@ -1,0 +1,28 @@
+#pragma version 12
+
+main:
+    txn NumAppArgs
+    bz route_1
+    pushbytess 0x00000002 0x00000003
+    txna ApplicationArgs 0
+    match route_2 route_3
+    pushint 1
+    return
+    
+route_1:
+    pushbytes "Called Route 1!"
+    log
+    pushint 1
+    return
+
+route_2:
+    pushbytes "Called Route 2!"
+    log
+    pushint 1
+    return
+
+route_3:
+    pushbytes "Called Route 3!"
+    log
+    pushint 1
+    return

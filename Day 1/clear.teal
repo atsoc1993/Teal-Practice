@@ -1,0 +1,5 @@
+#pragma version 12
+
+main:
+    pushint 1
+    return
