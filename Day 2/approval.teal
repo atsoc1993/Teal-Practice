@@ -1,0 +1,40 @@
+#pragma version 12
+
+main:
+    bytecblock "test_1" "test_2" "test_3" "test_4" "test_5"
+    bytec_0
+    pushint 1
+    bytec_1
+    pushint 1
+    bytec_2
+    pushint 1
+    bytec_3
+    pushint 1
+    bytec 4
+    pushint 1
+    app_global_put
+    txn NumAppArgs
+    bz route_1
+    pushbytess 0x00000002 0x00000003
+    txna ApplicationArgs 0
+    match route_2 route_3
+    pushint 1
+    return
+    
+route_1:
+    pushbytes "Called Route 1!"
+    log
+    pushint 1
+    return
+
+route_2:
+    pushbytes "Called Route 2!"
+    log
+    pushint 1
+    return
+
+route_3:
+    pushbytes "Called Route 3!"
+    log
+    pushint 1
+    return
